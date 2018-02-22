@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
@@ -83,6 +84,13 @@ class Handler extends ExceptionHandler
          */
         if ($exception instanceof AuthorizationException) {
             return $this->errorResponse($exception->getMessage(), 403);
+        }
+
+        /**
+         * NotFoundHttpException
+         */
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse('The specified URL cannot be found', 404);
         }
 
         return parent::render($request, $exception);
