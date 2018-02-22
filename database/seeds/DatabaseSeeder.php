@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         Transaction::truncate();
         DB::table('category_product')->truncate();
 
-        factory(User::class, 200)->create();
+        factory(User::class, 1000)->create();
         factory(Category::class, 30)->create();
         factory(Product::class, 1000)->create()->each(function ($product) {
             $categories = Category::all()->random(mt_rand(1,5))->pluck('id');
