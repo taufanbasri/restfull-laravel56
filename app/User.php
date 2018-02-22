@@ -24,6 +24,8 @@ class User extends Authenticatable
         'name', 'email', 'password', 'verified', 'verification_token', 'admin'
     ];
 
+    protected $table = 'users';
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -43,7 +45,7 @@ class User extends Authenticatable
         return $this->admin == User::ADMIN_USER;
     }
 
-    public function generateVerificationCode()
+    public static function generateVerificationCode()
     {
         return str_random(40);
     }
