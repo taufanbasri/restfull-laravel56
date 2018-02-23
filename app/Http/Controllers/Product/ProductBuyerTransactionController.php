@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Product;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ApiController;
-use App\Seller;
+use App\User;
+use App\Transaction;
 
 class ProductBuyerTransactionController extends ApiController
 {
@@ -40,5 +42,18 @@ class ProductBuyerTransactionController extends ApiController
         if ($product->quantity < $request->quantity) {
             return $this->errorResponse('Product does not have enough units for this transaction', 409);
         }
+
+        return DB::transaction(function () use ($request, $product, $buyer) {
+            $product->quantity -= $request->quantity;
+            $product->save();
+
+            $transaction = Transaction::create([
+                'quantity' => $request->quantity,
+                'buyer_id' => $buyer->id,
+                'product_id' => $product->id,
+            ]);
+
+            return $this->showOne($transaction, 201);
+        });
     }
 }
