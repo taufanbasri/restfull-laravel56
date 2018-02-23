@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ApiController;
 use App\User;
 use App\Product;
@@ -99,6 +100,7 @@ class SellerProductController extends ApiController
         $this->checkSeller($seller, $product);
 
         $product->delete();
+        Storage::delete($product->image);
 
         return $this->showOne($product);
     }
