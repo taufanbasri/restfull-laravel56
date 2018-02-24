@@ -24,7 +24,7 @@ trait ApiResponser
     protected function showAll(Collection $collection, $code = 200)
     {
         if ($collection->isEmpty()) {
-            return $this->successResponse(['data' => $collection], $code);
+            return $this->successResponse($collection, $code);
         }
 
         $transformer = $collection->first()->transformer;
@@ -38,7 +38,7 @@ trait ApiResponser
         $collection = $this->transformData($collection, $transformer);
         $collection = $this->cacheResponse($collection);
 
-        return $this->successResponse(['data' => $collection], $code);
+        return $this->successResponse($collection, $code);
     }
 
     protected function showOne(Model $instance, $code = 200)
@@ -46,12 +46,12 @@ trait ApiResponser
         $transformer = $instance->transformer;
         $instance = $this->transformData($instance, $transformer);
 
-        return $this->successResponse(['data' => $instance], $code);
+        return $this->successResponse($instance, $code);
     }
 
     protected function showMessage($message, $code = 200)
     {
-        return $this->successResponse(['data' => $message], $code);
+        return $this->successResponse($message, $code);
     }
 
     protected function filterData(Collection $collection, $transformer)
