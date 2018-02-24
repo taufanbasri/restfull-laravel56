@@ -80,7 +80,7 @@ class Handler extends ExceptionHandler
          * AuthenticationException
          */
         if ($exception instanceof AuthenticationException) {
-            return $this->unauthenticated($exception, $request);
+            return $this->unauthenticated($request, $exception);
         }
 
         /**
