@@ -26,6 +26,11 @@ trait ApiResponser
         }
 
         $transformer = $collection->first()->transformer;
+
+        /**
+         * Sort must execute before transform
+         */
+        $collection = $this->sortData($collection);
         $collection = $this->transformData($collection, $transformer);
 
         return $this->successResponse(['data' => $collection], $code);
@@ -35,13 +40,25 @@ trait ApiResponser
     {
         $transformer = $instance->transformer;
         $instance = $this->transformData($instance, $transformer);
-        
+
         return $this->successResponse(['data' => $instance], $code);
     }
 
     protected function showMessage($message, $code = 200)
     {
         return $this->successResponse(['data' => $message], $code);
+    }
+
+    /**
+     * Sort must execute before transform
+     */
+    public function sortData(Collection $collection)
+    {
+        if (request()->has('sort_by')) {
+            $collection = $collection->sortBy->{request()->sort_by};
+        }
+
+        return $collection;
     }
 
     protected function transformData($data, $transformer)
