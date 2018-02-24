@@ -30,7 +30,7 @@ trait ApiResponser
         /**
          * Sort must execute before transform
          */
-        $collection = $this->sortData($collection);
+        $collection = $this->sortData($collection, $transformer);
         $collection = $this->transformData($collection, $transformer);
 
         return $this->successResponse(['data' => $collection], $code);
@@ -52,10 +52,11 @@ trait ApiResponser
     /**
      * Sort must execute before transform
      */
-    public function sortData(Collection $collection)
+    public function sortData(Collection $collection, $transformer)
     {
         if (request()->has('sort_by')) {
-            $collection = $collection->sortBy->{request()->sort_by};
+            $attribute = $transformer::originalAttribute(request()->sort_by);
+            $collection = $collection->sortBy->{$attribute};
         }
 
         return $collection;
