@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -119,6 +120,13 @@ class Handler extends ExceptionHandler
             if ($errorCode == 1451) {
                 return $this->errorResponse('Cannot remove this resource permanently. It is related with any other resource', 409);
             }
+        }
+
+        /**
+         * TokenMismatchException
+         */
+        if ($exception instanceof TokenMismatchException) {
+            return redirect()->back()->withInput($request->input());
         }
 
         if (config('app.debug')) {
