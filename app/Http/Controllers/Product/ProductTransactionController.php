@@ -12,7 +12,7 @@ class ProductTransactionController extends ApiController
     {
         parent::__construct();
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +20,8 @@ class ProductTransactionController extends ApiController
      */
     public function index(Product $product)
     {
+        $this->allowedAdminAction();
+        
         $transactions = $product->transactions;
 
         return $this->showAll($transactions);
