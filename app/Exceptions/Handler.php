@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Asm89\Stack\CorsService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -59,6 +60,18 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
+    {
+        $response = $this->handleExcetion($request, $exception);
+
+        app(CorsService::class)->addActualRequestHeaders($response, $request);
+
+        return $response;
+    }
+
+    /**
+     * Handle All Exception
+     */
+    public function handleExcetion($request, Exception $exception)
     {
         /**
          * ValidationException
